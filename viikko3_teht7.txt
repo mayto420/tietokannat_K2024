@@ -1,0 +1,134 @@
+a) Tulosta kymmenen aakkosjärjestyksessä ensimmäisen työntekijän tiedot sukunimen mukaan lajiteltuna.
+  SELECT * FROM employees ORDER BY last_name LIMIT 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  11761 | 1964-07-17 | Bartek     | Aamodt    | M      | 1991-06-12 |
+|  15427 | 1959-03-06 | Aluzio     | Aamodt    | M      | 1985-03-03 |
+|  18182 | 1963-02-23 | Dekang     | Aamodt    | F      | 1988-05-25 |
+|  16572 | 1956-11-26 | Matt       | Aamodt    | M      | 1987-06-16 |
+|  12791 | 1960-06-16 | Mokhtar    | Aamodt    | M      | 1994-08-14 |
+|  12516 | 1958-06-25 | Sreenivas  | Aamodt    | F      | 1990-03-06 |
+|  12982 | 1952-12-08 | Sachem     | Aamodt    | F      | 1992-01-11 |
+|  17400 | 1962-03-22 | Basim      | Aamodt    | F      | 1991-09-15 |
+|  19898 | 1957-03-09 | Vidar      | Aamodt    | M      | 1988-08-06 |
+|  17885 | 1954-02-01 | Takanari   | Aamodt    | M      | 1996-08-19 |
++--------+------------+------------+-----------+--------+------------+
+
+b) Sama kuten edellä, mutta sukunimen JA etunimen mukaan lajiteltuna.
+  SELECT * FROM employees ORDER BY first_name asc, last_name asc LIMIT 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  69256 | 1962-04-14 | Aamer      | Anger     | M      | 1998-03-16 |
+| 486584 | 1952-08-12 | Aamer      | Armand    | M      | 1990-09-15 |
+| 237165 | 1962-02-23 | Aamer      | Azevdeo   | F      | 1991-06-28 |
+| 413688 | 1955-06-26 | Aamer      | Azuma     | M      | 1989-12-10 |
+| 281363 | 1956-05-18 | Aamer      | Baak      | F      | 1994-03-10 |
+| 242368 | 1959-07-26 | Aamer      | Baaleh    | F      | 1989-08-06 |
+| 206549 | 1960-02-24 | Aamer      | Baar      | M      | 1995-06-12 |
+| 259089 | 1963-06-08 | Aamer      | Baba      | M      | 1995-02-02 |
+| 283280 | 1962-10-21 | Aamer      | Bahl      | F      | 1985-11-22 |
+|  60922 | 1961-01-01 | Aamer      | Bahl      | F      | 1992-06-21 |
++--------+------------+------------+-----------+--------+------------+
+
+c) Tulosta viiden viimeksi palkatun työntekijän tiedot.
+  SELECT * FROM employees ORDER BY hire_date desc LIMIT 5;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+| 463807 | 1964-06-12 | Bikash     | Covnot    | M      | 2000-01-28 |
+| 428377 | 1957-05-09 | Yucai      | Gerlach   | M      | 2000-01-23 |
+| 499553 | 1954-05-06 | Hideyuki   | Delgrande | F      | 2000-01-22 |
+| 222965 | 1959-08-07 | Volkmar    | Perko     | F      | 2000-01-13 |
+|  47291 | 1960-09-09 | Ulf        | Flexer    | M      | 2000-01-12 |
++--------+------------+------------+-----------+--------+------------+
+
+Seuraavissa tehtävissä tarvitaan tietoja useammasta kuin yhdestä taulusta (JOIN).
+
+d) Kenellä on suurin palkka ? Tulosta etunimi, sukunimi ja palkka.
+SELECT first_name, last_name, salary FROM employees join salaries on employees.emp_no = salaries.emp_no where salary = (select max(salary) FROM salaries);
++------------+-----------+--------+
+| first_name | last_name | salary |
++------------+-----------+--------+
+| Tokuyasu   | Pesch     | 158220 |
++------------+-----------+--------+
+
+e) Kenellä on pienin palkka ? Tulosta etunimi, sukunimi ja palkka.
+SELECT first_name, last_name, salary FROM employees join salaries on employees.emp_no = salaries.emp_no where salary = (select min(salary) FROM salaries);
++------------+-----------+--------+
+| first_name | last_name | salary |
++------------+-----------+--------+
+| Olivera    | Baek      |  38623 |
++------------+-----------+--------+
+
+f) Tulosta työntekijät (etunimi, sukunimi, palkka), jotka ansaitsevat yli 150000. 
+SELECT first_name, last_name, salary FROM employees join salaries on employees.emp_no = salaries.emp_no WHERE salary > 150000;
+Lista on melko pitkä joten en liitä sitä tähän.
+
+g) Kuinka monta työntekijää työskentelee myynnissä (Sales) ? Entä markkinoinnissa (Marketing) ?
+ 
+      SELECT count(emp_no) as 'Sales employees' FROM dept_emp join departments on dept_emp.dept_no = departments.dept_no WHERE departments.dept_name = "Sales";
+        +-----------------+
+        | Sales employees |
+        +-----------------+
+        |           52245 |
+        +-----------------+
+
+  
+      SELECT count(emp_no) as 'Marketing employees' FROM dept_emp join departments on dept_emp.dept_no = departments.dept_no WHERE departments.dept_name = "Marketing";
+        +---------------------+
+        | Marketing employees |
+        +---------------------+
+        |               20211 |
+        +---------------------+
+
+h) Tulosta kaikkien osastonjohtajien (Department Managers) etunimi, sukunimi ja osasto, jolla työskentelee.
+  SELECT first_name, last_name, dept_name FROM employees join dept_manager on employees.emp_no = dept_manager.emp_no join departments on dept_manager.dept_no = departments.dept_no;
++-------------+--------------+--------------------+
+| first_name  | last_name    | dept_name          |
++-------------+--------------+--------------------+
+| Tonny       | Butterworth  | Customer Service   |
+| Marjo       | Giarratana   | Customer Service   |
+| Xiaobin     | Spinelli     | Customer Service   |
+| Yuchang     | Weedman      | Customer Service   |
+| DeForest    | Hagimont     | Development        |
+| Leon        | DasSarma     | Development        |
+| Ebru        | Alpin        | Finance            |
+| Isamu       | Legleitner   | Finance            |
+| Shirish     | Ossenbruggen | Human Resources    |
+| Karsten     | Sigstam      | Human Resources    |
+| Margareta   | Markovitch   | Marketing          |
+| Vishwani    | Minakawa     | Marketing          |
+| Krassimir   | Wegerle      | Production         |
+| Rosine      | Cools        | Production         |
+| Shem        | Kieras       | Production         |
+| Oscar       | Ghazalie     | Production         |
+| Peternela   | Onuegbe      | Quality Management |
+| Rutger      | Hofmeyr      | Quality Management |
+| Sanjoy      | Quadeer      | Quality Management |
+| Dung        | Pesch        | Quality Management |
+| Arie        | Staelin      | Research           |
+| Hilary      | Kambil       | Research           |
+| Przemyslawa | Kaelbling    | Sales              |
+| Hauke       | Zhang        | Sales              |
++-------------+--------------+--------------------+
+
+i) Mikä on myynnissä työskentelevien keskipalkka ? Entä markkinoinnissa ?
+   Sales:
+        SELECT avg(salary) FROM dept_emp join departments on dept_emp.dept_no = departments.dept_no join salaries on dept_emp.emp_no = salaries.emp_no WHERE dept_name = "Sales";
+        +-------------+
+        | avg(salary) |
+        +-------------+
+        |       80667 |
+        +-------------+
+
+    Marketing:
+        SELECT avg(salary) FROM dept_emp join departments on dept_emp.dept_no = departments.dept_no join salaries on dept_emp.emp_no = salaries.emp_no WHEREe dept_name = "Marketing";
+        +-------------+
+        | avg(salary) |
+        +-------------+
+        |       71913 |
+        +-------------+
+
+
