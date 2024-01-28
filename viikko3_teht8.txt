@@ -1,0 +1,36 @@
+a) Tulosta DVD-elokuvien kielet (language) aakkosjärjestyksessä
+  SELECT name FROM language ORDER BY name asc;
++----------+
+| name     |
++----------+
+| English  |
+| French   |
+| German   |
+| Italian  |
+| Japanese |
+| Mandarin |
++----------+
+
+b) Tulosta kaikkien niiden näyttelijöiden elokuvat, joiden sukunimi on Temple.
+  SELECT title FROM actor join film_actor on actor.actor_id = film_actor.actor_id join film on film_actor.film_id = film.film_id WHERE last_name = "Temple";
+  Lista liian pitkä joten en laita sitä tähän.
+
+c) Tulosta elokuvassa "Ghost Groundhog" näytelleet näyttelijät.
+  SELECT actors FROM film_list WHERE title="Ghost Groundhog";
++---------------------------------------------------------------------+
+| actors                                                              |
++---------------------------------------------------------------------+
+| DAN HARRIS, KENNETH TORN, KEVIN GARLAND, RUSSELL TEMPLE, RENEE BALL |
++---------------------------------------------------------------------+
+
+d) Montako kauhuelokuvaa ("Horror") tietokannassa on ?
+SELECT count(film_id) FROM category join film_category on category.category_id = film_category.category_id WHERE name="Horror";
++----------------+
+| count(film_id) |
++----------------+
+|             56 |
++----------------+
+
+e) Tulosta kaikki kauhuelokuvat.
+SELECT title as "Horror films" FROM category join film_category on category.category_id = film_category.category_id join film on film_category.film_id = film.film_id WHERE name="Horror";
+Lista liian pitkä joten en liitä sitä tähän.
